@@ -1,11 +1,19 @@
+// Importing necessary React and React Native components, including context for theming.
 import React, { useContext } from 'react';
-import { View, Text, ScrollView, SafeAreaView, Image } from 'react-native'; // Import ScrollView
+import { View, Text, ScrollView, SafeAreaView, Image } from 'react-native';
+// Importing the ThemeContext for dynamic theming throughout the app.
 import ThemeContext from '../ThemeContext';
+// Importing StyleSheet for styling components.
 import { StyleSheet } from 'react-native';
-import Logo from '../assets/ADPC_Logo_high.png';
+// Importing a logo image to be used within the About screen.
+import Logo from '../assets/adpc_logo_high.png';
 
+// Defining the AboutScreen functional component.
 const AboutScreen = () => {
+    // Using the useContext hook to access the current theme from ThemeContext.
     const { theme } = useContext(ThemeContext);
+
+    // The component returns a layout wrapped in a SafeAreaView and ScrollView for scrolling content.
     return (
       <SafeAreaView style={[styles.topContainer, { backgroundColor: theme.backgroundColor }]}>
         <ScrollView style={[styles.container, { backgroundColor: theme.backgroundColor }]}>
@@ -70,7 +78,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 223,
     height: 100,
-    marginBottom: 20, // Add some space below the logo if needed
+    marginBottom: 20,
   },
   logoContainer:{
     alignItems: 'center'
