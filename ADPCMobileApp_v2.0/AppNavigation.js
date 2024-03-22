@@ -42,7 +42,7 @@ const AppNavigation = () => {
                 headerStyle: {
                     backgroundColor: theme.backgroundColor, // Apply background color from the theme for header
                 },
-                headerTintColor: theme.textColor, // Apply text color from the theme for header text
+                headerTintColor: theme.headerTextColor, // Apply text color from the theme for header text
                 drawerStyle: {
                     backgroundColor: theme.backgroundColor, // Apply background color from the theme for drawer
                 },

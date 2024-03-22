@@ -12,9 +12,8 @@
 <!-- Permissions for Android 12 (API level 31) and higher -->
 <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation"/>
 <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-<uses-feature android:name="android.hardware.bluetooth" android:required="true"/>
-<uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
   <queries>
     <intent>

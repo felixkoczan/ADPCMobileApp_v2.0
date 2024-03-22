@@ -131,27 +131,25 @@ const styles = StyleSheet.create({
     
 },
   button: {
-    marginTop: 10,
-    padding: 10,
-    alignItems: 'center',
-    borderWidth: 1, 
-    borderRadius: 20, 
-    paddingHorizontal: 15, 
-    fontSize: 16, 
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center', // Center content horizontally
+    justifyContent: 'center', // Center content vertically
+    marginBottom: 10,
     width: '60%',
-   
+    // Add other styling for the button
 },
   buttonText: {
     fontSize: 16,
     fontWeight: 'bold',
 },
   input: {
-    height: 60, 
-    width: '100%', 
+    height: 60, // Fixed height for the input
+    width: '100%', // Make the TextInput fill its container
     borderWidth: 1,
-    padding: 10, 
+    padding: 10, // Adjust padding as needed, but be aware it affects the text area inside
     borderRadius: 10,
-    marginBottom: 20, 
+    marginBottom: 20, // Adjust this value to control the corner roundness
 },
 
   

@@ -4,10 +4,10 @@
     "slug": "ADPCMobileApp_v2.0",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/ADPC_Logo_high.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/ADPC_Logo_high.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/ADPC_Logo_high",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.android"
