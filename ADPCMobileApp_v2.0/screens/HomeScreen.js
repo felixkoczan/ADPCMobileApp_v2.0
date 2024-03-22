@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 // Import the ThemeContext to use for dynamic theming throughout the app.
 import ThemeContext from '../ThemeContext';
 // Import an image to be used as a logo within the component.
-import Logo from '../assets/ADPC_Logo_high.png';
+import Logo from '../assets/adpc_logo_high.png';
 // Import a custom hook from BLEContext to manage BLE operations.
 import { useBLE } from '../BLEContext';
 
@@ -14,30 +14,28 @@ const HomeScreen = ({ navigation }) => {
     const { theme } = useContext(ThemeContext);
     // Access BLE-related functionalities (starting a scan and checking if a scan is ongoing)
     // through the custom hook useBLE.
-    const { startScan, isScanning } = useBLE();
+    const { startScan } = useBLE();
     
     
     return (
         <View style={[styles.container, { backgroundColor: theme.backgroundColor }]}>
             <Image source={Logo} style={styles.logo} />
             <Text style={[styles.title, { color: theme.textColor }]}>Welcome to ADPC-IoT</Text>
-          <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={[styles.discoverButton, 
-              { backgroundColor: theme.buttonTextColor }]}
+              { backgroundColor: theme.backgroundColor, borderColor: theme.textColor }]}
               onPress={() => {
                 // Call the startScan function
                 startScan();
                 // Navigate to the 'Device Registration' screen
                 navigation.navigate('Discover Devices');
               }}>
-              <Text style={[styles.buttonText, { color: theme.backgroundColor }]}>
+              <Text style={[styles.buttonText, { color: theme.textColor }]}>
                 Scan for Devices
               </Text>
             </TouchableOpacity>
-            </View>
             <TouchableOpacity
-                style={[styles.button, { backgroundColor: theme.buttonColor }]}
+                style={[styles.button, { backgroundColor: theme.buttonColor, borderColor: theme.textColor }]}
                 onPress={() => navigation.navigate('Manage Consents')}>
                 <Text style={[styles.buttonText, { color: theme.buttonTextColor }]}>Manage Consents</Text>
             </TouchableOpacity>
@@ -69,22 +67,24 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: '#333',
 },
-
   button: {
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    marginBottom: 10,
+    marginTop: 10,
+    padding: 10,
+    alignItems: 'center',
+    borderWidth: 1, 
+    borderRadius: 20, 
+    paddingHorizontal: 15, 
+    fontSize: 16, 
     width: '60%',
   },
   discoverButton: {
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center', 
-    justifyContent: 'center',
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: 10,
+    padding: 10,
+    alignItems: 'center',
+    borderWidth: 1, 
+    borderRadius: 20, 
+    paddingHorizontal: 15, 
+    fontSize: 16, 
     width: '60%',
   },
   buttonText: {
@@ -96,9 +96,6 @@ const styles = StyleSheet.create({
     width: 223,
     height: 100,
     marginBottom: 20, 
-  },
-  buttonContainer: {
-    alignItems: 'stretch'
   },
 });
 

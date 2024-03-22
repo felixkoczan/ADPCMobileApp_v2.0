@@ -1,15 +1,32 @@
 // Import necessary hooks and modules from React, React Native, and other dependencies.
-import React, { useEffect } from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
+import React, { useEffect, useContext, useState } from 'react';
+import { PermissionsAndroid, Platform, StatusBar, StyleSheet, ActivityIndicator, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native'; // For managing navigation.
 import AppNavigation from './AppNavigation'; // Custom navigation setup.
 import ThemeProvider from './ThemeProvider'; // Provides theming capabilities.
-import {BLEConnect, BLEProvider} from './BLEContext'; // Context for BLE operations.
+import { BLEProvider} from './BLEContext';
+import ThemeContext from './ThemeContext';
+
+
+const ThemeAwareStatusBar = () => {
+  const { theme } = useContext(ThemeContext);
+
+  useEffect(() => {
+    StatusBar.setBarStyle(theme.dark ? 'light-content' : 'dark-content', true);
+    StatusBar.setBackgroundColor(theme.backgroundColor);
+  }, [theme]);
+
+  return null;
+};
 
 const App = () => {
+  const [loading, setLoading] = useState(true);
+  const { theme } = useContext(ThemeContext);
+  
 
   // Use the useEffect hook to request necessary permissions upon app initialization.
   useEffect(() => {
+
     const requestBluetoothPermissions = async () => {
       try {
         // Check the platform and version to request appropriate permissions.
@@ -22,6 +39,7 @@ const App = () => {
             PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
           ]);
           console.log('Permissions status:', permissionsStatus);
+          permissionsGranted = Object.values(permissionsStatus).every(status => status === PermissionsAndroid.RESULTS.GRANTED);
         } else if (Platform.OS === 'android' && Platform.Version >= 23) {
           // For Android 6 (Marshmallow, API level 23) to Android 11, request location permission.
           // This is necessary for Bluetooth scanning due to the need to access location information.
@@ -39,23 +57,43 @@ const App = () => {
         // Catch and log any errors that occur during the permission request process.
         console.warn(err);
       }
+      setLoading(!permissionsGranted);
     };
 
-    // Call the function to request Bluetooth permissions.
     requestBluetoothPermissions();
-  }, []); // The empty dependency array ensures this effect runs only once when the component mounts.
+  }, []);
 
-  // Render the app's components wrapped in context providers for BLE and theming.
-  // The NavigationContainer wraps the app's navigation setup.
+  if (loading) {
+    return (
+      <View style={[styles.container, { backgroundColor: theme?.backgroundColor || '#FFF' }]}>
+        
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text style={styles.loadingText}>Requesting permissions...</Text>
+      </View>
+    );
+  }
+
   return (
     <BLEProvider>
       <ThemeProvider>
-        <NavigationContainer>
-          <AppNavigation />
+        <ThemeAwareStatusBar />
+          <NavigationContainer>
+            <AppNavigation />
         </NavigationContainer>
       </ThemeProvider>
     </BLEProvider>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 20,
+  },
+});
 
 export default App;
