@@ -92,7 +92,7 @@ const AppNavigation = () => {
                     },
                 }}
             />
-            <Drawer.Screen 
+            { /*<Drawer.Screen 
                 name="Device Registration" 
                 component={DeviceRegistrationScreen} 
                 options={{ 
@@ -101,7 +101,7 @@ const AppNavigation = () => {
                         color: theme.textColor, 
                     },
                 }}
-            />
+            /> */}
             <Drawer.Screen 
                 name="Settings" 
                 component={SettingsScreen} 

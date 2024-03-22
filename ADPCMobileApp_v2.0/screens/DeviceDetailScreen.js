@@ -288,8 +288,7 @@ const styles = StyleSheet.create({
   deleteButton: {
     marginTop: 10,
     padding: 10,
-    alignItems: 'center',
-    borderWidth: 1, 
+    alignItems: 'center', 
     borderRadius: 20, 
     paddingHorizontal: 15, 
     fontSize: 16, 

@@ -1,3 +1,4 @@
+/*
 // Importing React hooks and various React Native components for UI rendering and interaction.
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native'; // Hook for navigation between screens.
@@ -77,10 +78,9 @@ const DeviceRegistrationScreen = () => {
 
   // Render method for the UI.
   return (
-    // Dismisses the keyboard when touching outside of input fields.
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+    // Dismisses the keyboard when touching outside of input fields. */
+    {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <View style={[styles.container, { backgroundColor: theme.backgroundColor }]}>
-      {/* Input fields for device registration, styled according to the theme. */}
       <TextInput
         style={[styles.input, { color: theme.textColor, backgroundColor: theme.inputBackgroundColor, borderColor: theme.textColor }]}
         placeholder="MAC Address"
@@ -113,14 +113,14 @@ const DeviceRegistrationScreen = () => {
         onChangeText={setSerialNumber}
       />
 
-      {/* Button to trigger device registration. */}
+      
       <TouchableOpacity style={[styles.button, { backgroundColor: theme.backgroundColor, borderColor: theme.textColor }]} onPress={addDevice}>
         <Text style={[styles.buttonText, { color: theme.textColor }]}>Add Device</Text>
       </TouchableOpacity>
     </View>
-    </TouchableWithoutFeedback>
-  );
-};
+    </TouchableWithoutFeedback> */}
+  /*);
+}; 
 
 const styles = StyleSheet.create({
   container: {
@@ -158,3 +158,4 @@ const styles = StyleSheet.create({
 })
 
 export default DeviceRegistrationScreen;
+*/

@@ -39,13 +39,18 @@ const HomeScreen = ({ navigation }) => {
                 onPress={() => navigation.navigate('Manage Consents')}>
                 <Text style={[styles.buttonText, { color: theme.buttonTextColor }]}>Manage Consents</Text>
             </TouchableOpacity>
-            
             <TouchableOpacity
+                style={[styles.button, { backgroundColor: theme.buttonColor, borderColor: theme.textColor }]}
+                onPress={() => navigation.navigate('Settings')}>
+                <Text style={[styles.buttonText, { color: theme.buttonTextColor }]}>Settings</Text>
+            </TouchableOpacity>
+            
+            {/*<TouchableOpacity
                 style={[styles.button, { backgroundColor: theme.buttonColor, borderColor: theme.textColor }]}
                 onPress={() => navigation.navigate('Device Registration')}>
                 <Text style={[styles.buttonText, { color: theme.buttonTextColor }]}>Register Device</Text>
-            </TouchableOpacity>
-        </View>    
+            </TouchableOpacity> */}
+            </View>    
     );
 };
 
