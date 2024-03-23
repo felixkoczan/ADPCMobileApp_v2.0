@@ -1,6 +1,7 @@
 // Importing necessary React and React Navigation components and contexts.
 import React, { useContext } from 'react';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+// Importing screens that will be used in navigation.
 import AboutScreen from './screens/AboutScreen';
 import HomeScreen from './screens/HomeScreen';
 import ThemeContext from './ThemeContext';
@@ -10,41 +11,40 @@ import DiscoverDevicesScreen from './screens/DiscoverDevicesScreen';
 import ManageConsentsScreen from './screens/ManageConsentsScreen';
 import HiddenStack from './HiddenStackNavigator';
 
-
-// Create a Drawer navigator instance.
+// DrawerNavigator resembles a "Burger Menu (Three horizontal bars)" in the UI
 const Drawer = createDrawerNavigator();
 
 const AppNavigation = () => {
-    // Access the current theme from ThemeContext to apply dynamic theming.
-    const { theme } = useContext(ThemeContext);
 
+    const { theme } = useContext(ThemeContext);
     // Define a custom drawer content component to customize the appearance of the drawer.
     const CustomDrawerContent = (props) => {
         return (
             <DrawerContentScrollView {...props} style={{ backgroundColor: theme.backgroundColor }}>
                 <DrawerItemList {...props} 
-                    labelStyle={{ color: theme.textColor }} // Assuming you have a textColor in your theme
-                    activeTintColor={theme.textColor} // Use theme colors for active item label
-                    inactiveTintColor={theme.textColor} // Use theme colors for inactive item label
-                    activeBackgroundColor={theme.backgroundColor} // Use theme color for active item background
-                    itemStyle={{ backgroundColor: theme.backgroundColor }} // Use theme color for item background
+                    labelStyle={{ color: theme.textColor }} 
+                    activeTintColor={theme.textColor} 
+                    inactiveTintColor={theme.textColor} 
+                    activeBackgroundColor={theme.backgroundColor} 
+                    itemStyle={{ backgroundColor: theme.backgroundColor }} 
                 />
             </DrawerContentScrollView>
         );
     };
 
     return (
+        // Drawer.Navigator setup with custom configurations for theming and the custom drawer content.
         <Drawer.Navigator
             screenOptions={{
                 drawerLabelStyle: {
                     color: theme.textColor,
                 },
                 headerStyle: {
-                    backgroundColor: theme.backgroundColor, // Apply background color from the theme for header
+                    backgroundColor: theme.backgroundColor, 
                 },
-                headerTintColor: theme.textColor, // Apply text color from the theme for header text
+                headerTintColor: theme.textColor, 
                 drawerStyle: {
-                    backgroundColor: theme.backgroundColor, // Apply background color from the theme for drawer
+                    backgroundColor: theme.backgroundColor, 
                 },
             
                 
@@ -122,10 +122,11 @@ const AppNavigation = () => {
                     },
                 }}
             />
+            {/* HiddenStack is used for navigating to the device detail screen but is hidden from the drawer. */}
             <Drawer.Screen 
                 name="Device Details" 
                 component={HiddenStack} 
-                options={{ drawerItemStyle: { height: 0 } }}
+                options={{ drawerItemStyle: { height: 0 } }} // Makes this navigation item not visible in the drawer.
             />
         </Drawer.Navigator>
     );

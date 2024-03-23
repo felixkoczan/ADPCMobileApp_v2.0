@@ -1,3 +1,6 @@
+// OpenAIApi.js
+// Allows for API calls to the ChatGPT API amd fetch responses.
+
 // Import the Axios library for making HTTP requests
 import axios from 'axios';
 

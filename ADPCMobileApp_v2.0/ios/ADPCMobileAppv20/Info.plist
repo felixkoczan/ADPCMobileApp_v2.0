@@ -24,10 +24,13 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<!-- NSBluetoothPeripheralUsageDescription is needed to communicate with nearby Bluetooth devices. -->
 	<key>NSBluetoothPeripheralUsageDescription</key>
-<string>Our app uses Bluetooth to find, connect, and communicate with nearby devices.</string>
-<key>NSBluetoothAlwaysUsageDescription</key>
-<string>Our app needs Bluetooth access to connect to compatible devices even when you're not using the app.</string>
+	<string>Our app uses Bluetooth to find, connect, and communicate with nearby devices.</string>
+
+	<!-- NSBluetoothAlwaysUsageDescription allows Bluetooth to run in the background. -->
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Our app needs Bluetooth access to connect to compatible devices even when you're not using the app.</string>
 
 	<key>NSAppTransportSecurity</key>
 	<dict>

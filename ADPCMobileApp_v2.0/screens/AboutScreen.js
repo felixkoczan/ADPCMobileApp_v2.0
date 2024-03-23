@@ -1,16 +1,12 @@
-// Importing necessary React and React Native components, including context for theming.
+// AboutScreen.js
+// Lets users know what the app and ADPC is about. Contains no interaction elements, only Text.
 import React, { useContext } from 'react';
 import { View, Text, ScrollView, SafeAreaView, Image } from 'react-native';
-// Importing the ThemeContext for dynamic theming throughout the app.
 import ThemeContext from '../ThemeContext';
-// Importing StyleSheet for styling components.
 import { StyleSheet } from 'react-native';
-// Importing a logo image to be used within the About screen.
 import Logo from '../assets/adpc_logo_high.png';
 
-// Defining the AboutScreen functional component.
 const AboutScreen = () => {
-    // Using the useContext hook to access the current theme from ThemeContext.
     const { theme } = useContext(ThemeContext);
 
     // The component returns a layout wrapped in a SafeAreaView and ScrollView for scrolling content.

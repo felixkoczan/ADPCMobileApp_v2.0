@@ -1,8 +1,7 @@
 /*
-// Importing React hooks and various React Native components for UI rendering and interaction.
 import React, { useState, useContext, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native'; // Hook for navigation between screens.
-import ThemeContext from '../ThemeContext'; // Importing a custom theme context for styling.
+import { useNavigation } from '@react-navigation/native'; 
+import ThemeContext from '../ThemeContext'; 
 import {
   View,
   Text,
@@ -16,10 +15,7 @@ import {
   AsyncStorage, // Used for storing data locally on the device.
 } from 'react-native';
 
-// Defining the DeviceRegistrationScreen component.
 const DeviceRegistrationScreen = () => {
-  
-  // Hook for navigation actions.
   const navigation = useNavigation();
   // State hooks for form inputs.
   const [macAddress, setMacAddress] = useState('');
@@ -27,7 +23,6 @@ const DeviceRegistrationScreen = () => {
   const [deviceType, setDeviceType] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
 
-  // Accessing the theme context.
   const { theme } = useContext(ThemeContext);
 
   // useEffect hook to clear input fields when navigating away from the screen.
@@ -76,7 +71,6 @@ const DeviceRegistrationScreen = () => {
     }
   };
 
-  // Render method for the UI.
   return (
     // Dismisses the keyboard when touching outside of input fields. */
     {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -153,9 +147,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20, 
 },
+});
 
-  
-})
 
 export default DeviceRegistrationScreen;
 */

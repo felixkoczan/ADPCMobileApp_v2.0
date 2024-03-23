@@ -1,3 +1,6 @@
+// ManageConsentsScreen.js
+// Allows the user to manage their consent, as well as simplify the consent received.
+
 import React, { useState, useContext, useEffect, useCallback } from 'react';
 import {
   View,
@@ -10,25 +13,23 @@ import {
   TextInput,
 } from 'react-native';
 import ThemeContext from '../ThemeContext';
-import { apiCall } from '../apis/OpenAIApi'; // Make sure this path is correct
-import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
+import { apiCall } from '../apis/OpenAIApi'; 
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
 const ManageConsentsScreen = () => {
+
   const { theme } = useContext(ThemeContext);
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
-  const route = useRoute();
-  // Dynamically setting the container's opacity based on the modal's visibility.
   const containerOpacity = isModalVisible ? 0.5 : 1;
   const [devices, setDevices] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState([]);
-  const [data, setData] = useState([]);
 
 
   useFocusEffect(
@@ -38,30 +39,31 @@ const ManageConsentsScreen = () => {
           const jsonValue = await AsyncStorage.getItem('@devicesConsents');
           const devicesConsents = jsonValue != null ? JSON.parse(jsonValue) : [];
           setDevices(devicesConsents);
-          setFilteredData(devicesConsents); // Initially, filteredData is the same as devices
+          setFilteredData(devicesConsents);
           console.log(devicesConsents);
         } catch (e) {
           console.error("Failed to load devices and consents from AsyncStorage", e);
         }
       };
-  
       loadDeviceDetails();
-
       return () => {
         setSearchQuery('');
       }
     }, [])
   );
 
+
   useEffect(() => {
+    // Convert the search query to lowercase for case-insensitive comparison.
     const lowercasedQuery = searchQuery.toLowerCase();
-  
-    // First, transform devices based on search query.
     const transformedDevices = devices.map(device => {
+      // Check if a device's name matches the search query.
       const isDeviceMatch = device.deviceName.toLowerCase().includes(lowercasedQuery);
+      // Filter the consents within each device based on the search query. If the device name matches the query,
+      // keep all consents. Otherwise, only keep consents that match the query in any of their properties.
       const filteredConsents = isDeviceMatch
-        ? device.consents // Keep all consents if device name matches.
-        : device.consents.filter(consent => // Otherwise, filter consents by search query.
+        ? device.consents 
+        : device.consents.filter(consent => 
             consent.id.toLowerCase().includes(lowercasedQuery) ||
             consent.dataCategory.toLowerCase().includes(lowercasedQuery) ||
             consent.purposes.toLowerCase().includes(lowercasedQuery) ||
@@ -75,42 +77,37 @@ const ManageConsentsScreen = () => {
             consent.frequency.toLowerCase().includes(lowercasedQuery) ||
             consent.location.toLowerCase().includes(lowercasedQuery) 
           );
-  
+      // Return a new object for the device, updating the consents array to the filtered list.
       return {
         ...device,
         consents: filteredConsents,
       };
     });
-  
-    // Then, filter out devices that don't match the device name and have no consents matching the query.
+    // Further filter the transformed devices to include only those devices that match the search query
+    // in their name or have at least one consent matching the query.
     const filteredDevices = transformedDevices.filter(device =>
       device.deviceName.toLowerCase().includes(lowercasedQuery) || device.consents.length > 0
     );
-  
+    // Update the state with the filtered list of devices.
     setFilteredData(filteredDevices);
-  }, [searchQuery, devices]);
+  }, [searchQuery, devices]); // Re-run the effect if searchQuery or devices change.
   
 
-
-
-  // Function to handle the submission action for a device consent.
+  // Function to handle the submission action to simplify a device consent.
   const handleSubmit = async (deviceText) => {
-    setModalVisible(true); // Show the modal.
-    setIsLoading(true); // Indicate the start of an API call.
+    setModalVisible(true); 
+    setIsLoading(true); 
     try {
-      // Simulate an API call with the device's consent text.
+      // Start an API call with the device's consent text.
       const result = await apiCall(deviceText);
-      // Conditional logic based on the API call's success.
       if (result.success) {
         // Update the modal content with the API response if successful.
         setModalContent(result.data);
       } else {
-        // Log and show an error message if the API call fails.
         console.error(result.msg);
         setModalContent("Failed to fetch response.");
       }
     } catch (error) {
-      // Catch and log any errors during the API call.
       console.error('Error submitting prompt:', error);
       setModalContent("An error occurred while fetching the response.");
     } finally {
@@ -121,63 +118,62 @@ const ManageConsentsScreen = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.backgroundColor, opacity: containerOpacity }]}>
-           <TextInput
+      <TextInput
         style={[styles.searchBar, { backgroundColor: theme.backgroundColor }]}
         placeholder="Search for a device or consent ..."
-        placeholderTextColor= {theme.textColor}
+        placeholderTextColor={theme.textColor}
         value={searchQuery}
         onChangeText={text => setSearchQuery(text)}
       />
-
-    {filteredData.length > 0 ? (
-    filteredData.map((device, deviceIndex) => (
-    <View key={deviceIndex} style={[styles.deviceContainer, { backgroundColor: theme.itemBackgroundColor }]}>
-      <ScrollView>
-      <Text style={[styles.deviceName, { color: theme.textColor }]}>{device.deviceName}</Text>
-      {device.consents.map((consent, consentIndex) => (
-        <View key={consentIndex} style={styles.consentContainer}>
-          <Text style={[styles.consentHeading, { color: theme.textColor }]}>Consent ID:</Text>
-          <Text style={[styles.consentText, { color: theme.textColor }]}>{consent.id}</Text>
-          <Text style={[styles.consentHeading, { color: theme.textColor }]}>Summary:</Text>
-          <Text style={[styles.consentText, { color: theme.textColor }]}>{consent.summary}</Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[styles.button, { borderColor: theme.buttonTextColor }]}
-              onPress={() => {
-                console.log('Navigating to Device Details with:', { 
-                  peripheralId: device.peripheralId, 
-                  consentId: consent.id 
-                });
-                navigation.navigate('Device Details', { 
-                  screen: 'DeviceDetailScreen',  
-                  params: {
-                    peripheralId: device.peripheralId, 
-                    consentId: consent.id
-                  },
-                });
-              }}
-            >
-              <Text style={[styles.buttonText, { color: theme.textColor }]}>Manage Consent</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, { borderColor: theme.buttonTextColor }]}
-              onPress={() => handleSubmit(consent.summary)} // Adjust if necessary for your use case
-            >
-              <Text style={[styles.buttonText, { color: theme.textColor }]}>Simplify</Text>
-            </TouchableOpacity>
+  
+      {filteredData.length > 0 ? (
+        filteredData.map((device, deviceIndex) => (
+          <View key={deviceIndex} style={[styles.deviceContainer, { backgroundColor: theme.itemBackgroundColor }]}>
+            <ScrollView>
+              <Text style={[styles.deviceName, { color: theme.textColor }]}>{device.deviceName}</Text>
+              {device.consents.map((consent, consentIndex) => (
+                <View key={consentIndex} style={styles.consentContainer}>
+                  <Text style={[styles.consentHeading, { color: theme.textColor }]}>Consent ID:</Text>
+                  <Text style={[styles.consentText, { color: theme.textColor }]}>{consent.id}</Text>
+                  <Text style={[styles.consentHeading, { color: theme.textColor }]}>Summary:</Text>
+                  <Text style={[styles.consentText, { color: theme.textColor }]}>{consent.summary}</Text>
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={[styles.button, { borderColor: theme.buttonTextColor }]}
+                      onPress={() => {
+                        console.log('Navigating to Device Details with:', { 
+                          peripheralId: device.peripheralId, 
+                          consentId: consent.id 
+                        });
+                        navigation.navigate('Device Details', { 
+                          screen: 'DeviceDetailScreen',  
+                          params: {
+                            peripheralId: device.peripheralId, 
+                            consentId: consent.id
+                          },
+                        });
+                      }}
+                    >
+                      <Text style={[styles.buttonText, { color: theme.textColor }]}>Manage Consent</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.button, { borderColor: theme.buttonTextColor }]}
+                      onPress={() => handleSubmit(consent.summary)} // Adjust if necessary for your use case
+                    >
+                      <Text style={[styles.buttonText, { color: theme.textColor }]}>Simplify</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
           </View>
+        ))
+      ) : (
+        <View style={styles.noConsentsContainer}>
+          <Text style={styles.noConsentsText}>No consents received</Text>
         </View>
-      ))}
-      </ScrollView>
-    </View>
-  ))
-) : (
-  // This View is shown if filteredData is empty
-  <View style={styles.noConsentsContainer}>
-    <Text style={styles.noConsentsText}>No consents received</Text>
-  </View>
-)}
-
+      )}
+  
       <Modal
         animationType="slide"
         transparent={true}
@@ -207,10 +203,9 @@ const ManageConsentsScreen = () => {
         </View>
       </Modal>
     </View>
-  );
-          };
+  );  
+};
   
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -241,9 +236,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 10,
     alignItems: 'center',
-    borderWidth: 1, // Light grey border
-    borderRadius: 20, // Rounded corners
-    paddingHorizontal: 15, // Horizontal padding
+    borderWidth: 1, 
+    borderRadius: 20, 
+    paddingHorizontal: 15, 
     fontSize: 16, 
   },
   buttonText: {
@@ -288,15 +283,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   searchBar: {
-    height: 40, // Adjust the height as needed
+    height: 40, 
     margin: 12,
     borderWidth: 1,
-    borderColor: '#cccccc', // Light grey border
-    borderRadius: 20, // Rounded corners
-    paddingHorizontal: 15, // Horizontal padding
-    fontSize: 16, // Text size
-    color: '#cccccc', // Dark grey text color
-    // Add a shadow for depth (optional)
+    borderColor: '#cccccc', 
+    borderRadius: 20, 
+    paddingHorizontal: 15, 
+    fontSize: 16, 
+    color: '#cccccc', 
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
@@ -310,11 +304,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20, // Adjust as needed
+    padding: 20, 
   },
   noConsentsText: {
-    fontSize: 18, // Adjust as needed
-    color: '#666', // Adjust as needed
+    fontSize: 18, 
+    color: '#666', 
   },
 });
 
